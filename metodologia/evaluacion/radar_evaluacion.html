@@ -1,0 +1,176 @@
+
+<style>
+.wrap { padding: 1rem 0; max-width: 760px; margin: 0 auto; }
+.grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.dim-block { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.dim-block:nth-child(odd) { border-right: 0.5px solid var(--color-border-tertiary); }
+.dim-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+.dim-avg { font-size: 18px; font-weight: 500; min-width: 32px; text-align: right; }
+.axes-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.axis-item { display: flex; flex-direction: column; gap: 2px; }
+.axis-label { font-size: 10px; color: var(--color-text-secondary); }
+.axis-val { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-align: right; }
+.axis-slider-row { display: flex; align-items: center; gap: 4px; }
+.axis-slider-row input[type=range] { flex: 1; }
+.legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 8px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.chart-wrap { position: relative; width: 100%; height: 340px; }
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 1rem; }
+.metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.metric-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+.metric-sub { font-size: 10px; color: var(--color-text-secondary); margin-top: 2px; }
+</style>
+
+<div class="wrap">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>aprendido de pares</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>enseñado a pares</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div>evaluación docente</div>
+  </div>
+
+  <div class="grid-inputs" id="controls"></div>
+
+  <div class="metrics-row" id="metrics">
+    <div class="metric-card"><div class="metric-label">promedio aprendido</div><div class="metric-val" id="m0">5.0</div><div class="metric-sub">de pares</div></div>
+    <div class="metric-card"><div class="metric-label">promedio enseñado</div><div class="metric-val" id="m1">5.0</div><div class="metric-sub">a pares</div></div>
+    <div class="metric-card"><div class="metric-label">evaluación docente</div><div class="metric-val" id="m2">5.0</div><div class="metric-sub">producción</div></div>
+  </div>
+
+  <div class="chart-wrap" style="margin-top: 1rem;">
+    <canvas id="radar"></canvas>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const dims = [
+  { label: "Razonamiento",      sub: "Mat · Lógica · Estadística" },
+  { label: "Lenguaje",          sub: "Lengua · Lit · Comunicación" },
+  { label: "Ciencia",           sub: "Física · Química · Biología" },
+  { label: "Mundo",             sub: "Geografía · Historia · Geo" },
+  { label: "Humanidades",       sub: "Filosofía · Psicología · Ética" },
+  { label: "Expresión",         sub: "Artes · Música · Teatro" },
+  { label: "Ciudadanía",        sub: "Derecho · Economía · Demo" },
+  { label: "Mundo digital",     sub: "Tech · IA · Seguridad" },
+];
+
+const axisLabels = ["aprendido", "enseñado", "prueba objetiva"];
+const axisColors = ["#534AB7", "#1D9E75", "#D85A30"];
+const axisAlpha  = ["26", "26", "26"];
+
+const state = dims.map(() => [5, 5, 5]);
+
+const controls = document.getElementById('controls');
+dims.forEach((d, di) => {
+  const block = document.createElement('div');
+  block.className = 'dim-block';
+  const titleRow = document.createElement('div');
+  titleRow.className = 'dim-title';
+  titleRow.innerHTML = `<span>${d.label}</span><span class="dim-avg" id="avg-${di}" style="color:${avg2color(5)}">5.0</span>`;
+  block.appendChild(titleRow);
+  const sub = document.createElement('div');
+  sub.style.cssText = 'font-size:10px;color:var(--color-text-secondary);margin-bottom:6px;';
+  sub.textContent = d.sub;
+  block.appendChild(sub);
+  const axRow = document.createElement('div');
+  axRow.className = 'axes-row';
+  axisLabels.forEach((al, ai) => {
+    const item = document.createElement('div');
+    item.className = 'axis-item';
+    item.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;"><span class="axis-label" style="color:${axisColors[ai]};font-weight:500;">${al}</span><span class="axis-val" id="v-${di}-${ai}">5</span></div>`;
+    const slRow = document.createElement('div');
+    slRow.className = 'axis-slider-row';
+    const sl = document.createElement('input');
+    sl.type = 'range'; sl.min = 1; sl.max = 10; sl.step = 1; sl.value = 5;
+    sl.id = `s-${di}-${ai}`;
+    sl.addEventListener('input', () => {
+      const v = parseInt(sl.value);
+      state[di][ai] = v;
+      document.getElementById(`v-${di}-${ai}`).textContent = v;
+      updateAll();
+    });
+    slRow.appendChild(sl);
+    item.appendChild(slRow);
+    axRow.appendChild(item);
+  });
+  block.appendChild(axRow);
+  controls.appendChild(block);
+});
+
+function avg2color(a) {
+  if (a >= 7.5) return '#0F6E56';
+  if (a >= 5)   return '#534AB7';
+  return '#993C1D';
+}
+
+function getAvgs() { return state.map(r => r.reduce((s,v) => s+v, 0) / 3); }
+function getAxis(ai) { return state.map(r => r[ai]); }
+
+const ctx = document.getElementById('radar').getContext('2d');
+const makeDataset = (ai) => ({
+  label: axisLabels[ai],
+  data: dims.map(() => 5),
+  backgroundColor: axisColors[ai] + '18',
+  borderColor: axisColors[ai],
+  borderWidth: 1.5,
+  pointBackgroundColor: axisColors[ai],
+  pointRadius: 3,
+  pointHoverRadius: 5,
+});
+
+const chart = new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: dims.map(d => d.label),
+    datasets: [
+      makeDataset(0),
+      makeDataset(1),
+      makeDataset(2),
+      {
+        label: 'promedio',
+        data: dims.map(() => 5),
+        backgroundColor: 'rgba(83,74,183,0.08)',
+        borderColor: '#534AB7',
+        borderWidth: 2.5,
+        borderDash: [4, 3],
+        pointRadius: 0,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: {
+      callbacks: {
+        label: (c) => ` ${c.dataset.label}: ${c.raw.toFixed(1)}`
+      }
+    }},
+    scales: { r: {
+      min: 0, max: 10,
+      ticks: { stepSize: 2, color: '#888780', font: { size: 10 }, backdropColor: 'transparent' },
+      grid: { color: 'rgba(136,135,128,0.15)' },
+      angleLines: { color: 'rgba(136,135,128,0.15)' },
+      pointLabels: { color: '#444441', font: { size: 11, weight: '500' } }
+    }}
+  }
+});
+
+function updateAll() {
+  const avgs = getAvgs();
+  avgs.forEach((a, di) => {
+    const el = document.getElementById(`avg-${di}`);
+    el.textContent = a.toFixed(1);
+    el.style.color = avg2color(a);
+  });
+  [0,1,2].forEach(ai => { chart.data.datasets[ai].data = getAxis(ai); });
+  chart.data.datasets[3].data = avgs;
+  chart.update('none');
+
+  [0,1,2].forEach(ai => {
+    const colAvg = state.reduce((s, r) => s + r[ai], 0) / dims.length;
+    document.getElementById(`m${ai}`).textContent = colAvg.toFixed(1);
+  });
+}
+</script>

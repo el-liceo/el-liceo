@@ -43,9 +43,9 @@ El plan de estudios se organiza en cuatro etapas que respetan los ritmos de desa
 | Etapa | Edad | Enfoque pedagógico | Énfasis |
 |---|---|---|---|
 | Etapa 1 | 0–6 | Exploración sensorial y juego | Lenguaje, movimiento, curiosidad, vínculos afectivos |
-| Etapa 2 | 6–11 | Aprendizaje concreto | Lectoescritura, cálculo, convivencia, mundo natural |
-| Etapa 3 | 11–15 | Pensamiento abstracto emergente | Razonamiento, ciencias, historia, identidad |
-| Etapa 4 | 15–18 | Pensamiento crítico y autonomía | Síntesis, ciudadanía, proyecto vital, especialización inicial |
+| Etapa 2 | 6–12 | Aprendizaje concreto | Lectoescritura, cálculo, convivencia, mundo natural |
+| Etapa 3 | 12–16 | Pensamiento abstracto emergente | Razonamiento, ciencias, historia, identidad |
+| Etapa 4 | 16–18 | Pensamiento crítico y autonomía | Síntesis, ciudadanía, proyecto vital, especialización inicial |
 
 ---
 
@@ -455,3 +455,4 @@ Ninguna versión de este plan debe considerarse definitiva. El conocimiento avan
 - Ofrecer formación integral a cualquier persona, con independencia de su edad o punto de partida.
 - Articular teoría y práctica, razón y sensibilidad, individuo y comunidad.
 - Ser un proyecto abierto, colaborativo y de interés público: un bien común del conocimiento.
+
