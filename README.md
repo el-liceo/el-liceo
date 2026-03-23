@@ -55,8 +55,7 @@ El plan de estudios se organiza en seis etapas que respetan los ritmos de desarr
 >Nota sobre la etapa 0 Este currículo empieza antes de que el alumnado pueda aprender nada
 >en el sentido académico del término. La etapa 0 tiene principios de cuidado, de vínculo, de presencia.
 >Lo incluimos aquí porque una educación que empieza a los seis años ya llega tarde a muchas cosas
->y porque los profesores que trabajan con niños de tres años en adelante
-necesitan saber de dónde vienen.
+>y porque los profesores que trabajan con niños de tres años en adelante necesitan saber de dónde vienen.
 
 ---
 

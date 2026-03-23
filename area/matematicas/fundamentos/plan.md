@@ -1,4 +1,4 @@
-# Ideas unidades didacticas para matematicas/transversal
+# Ideas unidades didacticas para matematicas/fundamentos
 
 Ideas de UD a desarrollar y debatir.
 
