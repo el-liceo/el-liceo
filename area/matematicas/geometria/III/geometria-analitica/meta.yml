@@ -1,0 +1,44 @@
+unidad: "area-I-matematicas/unidad-03-geometria-analitica"
+titulo: "El plano como lenguaje"
+subtitulo: "Geometría analítica: coordenadas, distancias y rectas"
+
+area:
+  codigo: "I"
+  nombre: "Matemáticas"
+  subarea:
+    codigo: "B"
+    nombre: "Geometría y Medida"
+
+etapa: 3
+rango_edad: "11–15"
+sesiones: 8
+duracion_sesion_min: 60
+
+dimension_radar: razonamiento
+
+competencias_transversales:
+  - pensamiento_critico
+  - resolucion_de_problemas
+  - pensamiento_sistemico
+  - comunicacion_efectiva      # sesión 8: exposición pública
+
+prerequisitos:
+  - area-I-matematicas/unidad-01-aritmetica
+  - area-I-matematicas/unidad-02-geometria-euclidea
+
+desbloquea:
+  - area-I-matematicas/unidad-04-algebra-funciones
+  - area-V-fisica/unidad-02-cinematica
+
+autores:
+  - github: "@prof-garcia"
+    rol: "autor principal"
+    area_expertise: "matemáticas, etapa 3"
+  - github: "@prof-martinez"
+    rol: "revisor pedagógico"
+
+version: "1.2.0"
+fecha_publicacion: "2025-03-10"
+fecha_ultima_revision: "2025-03-18"
+licencia: "CC-BY-SA 4.0"
+idioma: "es"
